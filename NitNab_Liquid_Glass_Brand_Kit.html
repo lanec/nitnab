@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NitNab — Liquid Glass Brand Kit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    /* Apple System Colors — Light */
+    --sys-blue: #007AFF;
+    --sys-green: #34C759;
+    --sys-indigo: #5856D6;
+    --sys-orange: #FF9500;
+    --sys-pink: #FF2D55;
+    --sys-purple: #AF52DE;
+    --sys-red: #FF3B30;
+    --sys-teal: #5AC8FA;
+    --sys-yellow: #FFCC00;
+    --sys-gray1: #8E8E93;
+    --sys-gray2: #AEAEB2;
+    --sys-gray3: #C7C7CC;
+    --sys-gray4: #D1D1D6;
+    --sys-gray5: #E5E5EA;
+    --sys-gray6: #F2F2F7;
+
+    /* Apple System Colors — Dark */
+    --sys-blue-dark: #0A84FF;
+    --sys-green-dark: #30D158;
+    --sys-indigo-dark: #5E5CE6;
+    --sys-orange-dark: #FF9F0A;
+    --sys-pink-dark: #FF375F;
+    --sys-purple-dark: #BF5AF2;
+    --sys-red-dark: #FF453A;
+    --sys-teal-dark: #64D2FF;
+    --sys-yellow-dark: #FFD60A;
+    --sys-gray1-dark: #8E8E93;
+    --sys-gray2-dark: #636366;
+    --sys-gray3-dark: #48484A;
+    --sys-gray4-dark: #3A3A3C;
+    --sys-gray5-dark: #2C2C2E;
+    --sys-gray6-dark: #1C1C1E;
+
+    /* Semantic */
+    --label-primary: #000000;
+    --label-secondary: #3C3C4399;
+    --label-tertiary: #3C3C434D;
+    --label-primary-dark: #FFFFFF;
+    --label-secondary-dark: #EBEBF599;
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F2F2F7;
+    --bg-primary-dark: #000000;
+    --bg-secondary-dark: #1C1C1E;
+    --separator: #3C3C4349;
+    --separator-dark: #54545899;
+
+    /* Page chrome */
+    --page-bg: #F5F5F7;
+    --text-primary: #1D1D1F;
+    --text-secondary: #86868B;
+    --border: #D2D2D7;
+    --card-bg: #FFFFFF;
+    --sf: -apple-system, BlinkMacSystemFont, 'Inter', 'Helvetica Neue', sans-serif;
+    --mono: 'SF Mono', 'Space Grotesk', 'Menlo', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--sf);
+    background: var(--page-bg);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    background: #000; color: #fff;
+    text-align: center; padding: 60px 40px;
+    position: relative; overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute; top: 50%; left: 50%;
+    width: 500px; height: 500px;
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,122,255,0.12) 0%, rgba(88,86,214,0.06) 50%, transparent 70%);
+    filter: blur(80px);
+  }
+  .cover-z { position: relative; z-index: 1; max-width: 720px; }
+  .cover-icon {
+    width: 72px; height: 72px; border-radius: 16px;
+    background: linear-gradient(135deg, var(--sys-blue), var(--sys-indigo));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; margin: 0 auto 36px;
+    box-shadow: 0 6px 24px rgba(0,122,255,0.25);
+  }
+  .cover-tag {
+    display: inline-block; padding: 5px 18px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 980px; font-size: 11px;
+    letter-spacing: 1.8px; text-transform: uppercase;
+    margin-bottom: 28px; color: rgba(255,255,255,0.55);
+  }
+  .cover h1 {
+    font-size: clamp(36px,5vw,56px); font-weight: 700;
+    line-height: 1.08; margin-bottom: 16px; letter-spacing: -1.2px;
+  }
+  .cover h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--sys-blue), var(--sys-teal), var(--sys-indigo));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .cover p {
+    font-size: 17px; color: rgba(255,255,255,0.6);
+    max-width: 520px; margin: 0 auto 36px; line-height: 1.6;
+  }
+  .cover-meta {
+    display: flex; gap: 28px; justify-content: center;
+    font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 0.3px;
+  }
+
+  /* ── KIT SECTION ── */
+  .kit { max-width: 1040px; margin: 0 auto; padding: 0 40px 72px; }
+  .kit-hd { padding: 72px 0 40px; border-bottom: 0.5px solid var(--border); margin-bottom: 40px; }
+  .kit-num { font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600; }
+  .kit-hd h2 { font-size: clamp(26px,3.5vw,40px); font-weight: 700; letter-spacing: -0.8px; margin-bottom: 10px; line-height: 1.1; }
+  .kit-hd .tl { font-size: 17px; color: var(--text-secondary); max-width: 600px; line-height: 1.55; letter-spacing: -0.41px; }
+  .concept {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px; margin-bottom: 36px;
+  }
+  .concept h3 { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 10px; font-weight: 600; }
+  .concept p { font-size: 15px; line-height: 1.7; color: #424245; max-width: 720px; }
+
+  /* ── SUB ── */
+  .sub { margin-bottom: 40px; }
+  .sub-t {
+    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text-secondary); margin-bottom: 16px; padding-bottom: 8px;
+    border-bottom: 0.5px solid var(--border); font-weight: 600;
+  }
+
+  /* ── COLORS ── */
+  .pal { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .chip { flex: 1; min-width: 110px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(0,0,0,0.04); }
+  .chip .sw { height: 76px; display: flex; align-items: flex-end; padding: 8px 12px; font-size: 11px; font-weight: 600; }
+  .chip .inf { padding: 8px 12px; background: var(--card-bg); }
+  .chip .inf .nm { font-size: 12px; font-weight: 600; margin-bottom: 1px; }
+  .chip .inf .hx { font-size: 10px; color: var(--text-secondary); font-family: var(--mono); }
+
+  /* ── TYPE ── */
+  .ts {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px; margin-bottom: 10px;
+  }
+  .ts .lb { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; font-family: var(--mono); font-weight: 500; }
+  .ts .mt { font-size: 11px; color: var(--text-secondary); margin-top: 8px; font-family: var(--mono); }
+
+  /* ── TABLE ── */
+  .tt { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
+  .tt th { text-align: left; font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-secondary); padding: 8px 12px; border-bottom: 1.5px solid var(--border); font-weight: 600; }
+  .tt td { padding: 8px 12px; border-bottom: 0.5px solid #ececee; vertical-align: middle; }
+  .tt .tn { font-family: var(--mono); font-weight: 500; font-size: 11px; color: #424245; }
+  .sw-dot { width: 18px; height: 18px; border-radius: 4px; display: inline-block; vertical-align: middle; margin-right: 6px; border: 1px solid rgba(0,0,0,0.05); }
+
+  /* ── THEMES ── */
+  .th-g { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  @media (max-width: 768px) { .th-g { grid-template-columns: 1fr; } }
+  .th-p { border-radius: 14px; padding: 24px; overflow: hidden; }
+  .th-p.lt { background: #fff; color: #1d1d1f; border: 1px solid #d2d2d7; }
+  .th-p.dk { background: #000; color: #f5f5f7; }
+  .th-lb { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 14px; font-weight: 600; }
+  .th-lb.lt-lb { color: rgba(0,0,0,0.4); }
+  .th-lb.dk-lb { color: rgba(255,255,255,0.5); }
+  .th-p h4 { font-size: 20px; font-weight: 600; margin-bottom: 5px; letter-spacing: -0.41px; }
+  .th-p p { font-size: 13px; margin-bottom: 14px; line-height: 1.5; letter-spacing: -0.08px; }
+  .th-p.lt p { color: rgba(0,0,0,0.55); }
+  .th-p.dk p, .dk-desc { color: rgba(255,255,255,0.6); }
+  .btn {
+    display: inline-block; padding: 8px 20px; border-radius: 980px;
+    font-size: 13px; font-weight: 600; border: none; cursor: pointer; letter-spacing: -0.08px;
+  }
+  .tag {
+    display: inline-block; padding: 4px 12px; border-radius: 980px;
+    font-size: 11px; font-weight: 500; margin-right: 5px; margin-bottom: 5px;
+  }
+  .inner { border-radius: 10px; padding: 14px; margin-top: 12px; }
+  .inner .sl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 2px; font-weight: 600; }
+  .inner .sl.lt-sl { color: rgba(0,0,0,0.35); }
+  .inner .sl.dk-sl { color: rgba(255,255,255,0.45); }
+  .inner .ct { font-size: 14px; font-weight: 600; letter-spacing: -0.08px; }
+
+  /* ── USAGE ── */
+  .ug { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 12px; }
+  .uc { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .uc .pv { padding: 24px; min-height: 170px; display: flex; flex-direction: column; justify-content: center; }
+  .uc .cp { padding: 14px 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); line-height: 1.45; }
+  .uc .cp strong { color: var(--text-primary); display: block; margin-bottom: 2px; font-size: 13px; }
+
+  /* ── DIVIDER ── */
+  .dv { height: 0.5px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 72px auto; max-width: 960px; }
+
+  /* ── NOTE ── */
+  .note {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px; margin-bottom: 24px;
+    font-size: 13px; color: #424245; line-height: 1.55;
+  }
+  .note code { font-family: var(--mono); font-size: 11px; background: #f2f2f7; padding: 2px 6px; border-radius: 4px; }
+
+  @media print {
+    .cover { min-height: auto; page-break-after: always; }
+    .kit { page-break-before: always; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ██ COVER ██ -->
+<section class="cover">
+  <div class="cover-z">
+    <div class="cover-icon">🎙️</div>
+    <div class="cover-tag">Under Apple Design Direction &middot; Confidential</div>
+    <h1>NitNab<br><em>Liquid Glass Brand Kit</em></h1>
+    <p>The definitive brand direction for a privacy-first, on-device transcription app. Built entirely with Apple's system palette, SF Pro type scale, and macOS Tahoe's Liquid Glass material language.</p>
+    <div class="cover-meta">
+      <span>macOS Tahoe 26</span>
+      <span>Apple Intelligence</span>
+      <span>February 2026</span>
+      <span>100% On-Device</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ██ REFERENCE: APPLE SYSTEM COLORS ██ -->
+<section class="kit" style="padding-top: 72px;">
+  <div class="kit-hd" style="padding-top: 0;">
+    <div class="kit-num">Reference</div>
+    <h2>Apple System Color Palette</h2>
+    <p class="tl">The Liquid Glass brand kit draws exclusively from Apple's official system colors. No custom hex values are introduced. Every color shifts automatically between light and dark appearance via system APIs.</p>
+  </div>
+
+  <div class="sub">
+    <div class="sub-t">System Colors — Light &amp; Dark Pairs</div>
+    <table class="tt">
+      <thead><tr><th>Name</th><th>Light</th><th>Dark</th><th>SwiftUI Token</th></tr></thead>
+      <tbody>
+        <tr><td>Blue</td><td><span class="sw-dot" style="background:#007AFF;"></span>#007AFF</td><td><span class="sw-dot" style="background:#0A84FF;"></span>#0A84FF</td><td class="tn">.blue</td></tr>
+        <tr><td>Green</td><td><span class="sw-dot" style="background:#34C759;"></span>#34C759</td><td><span class="sw-dot" style="background:#30D158;"></span>#30D158</td><td class="tn">.green</td></tr>
+        <tr><td>Indigo</td><td><span class="sw-dot" style="background:#5856D6;"></span>#5856D6</td><td><span class="sw-dot" style="background:#5E5CE6;"></span>#5E5CE6</td><td class="tn">.indigo</td></tr>
+        <tr><td>Orange</td><td><span class="sw-dot" style="background:#FF9500;"></span>#FF9500</td><td><span class="sw-dot" style="background:#FF9F0A;"></span>#FF9F0A</td><td class="tn">.orange</td></tr>
+        <tr><td>Pink</td><td><span class="sw-dot" style="background:#FF2D55;"></span>#FF2D55</td><td><span class="sw-dot" style="background:#FF375F;"></span>#FF375F</td><td class="tn">.pink</td></tr>
+        <tr><td>Purple</td><td><span class="sw-dot" style="background:#AF52DE;"></span>#AF52DE</td><td><span class="sw-dot" style="background:#BF5AF2;"></span>#BF5AF2</td><td class="tn">.purple</td></tr>
+        <tr><td>Red</td><td><span class="sw-dot" style="background:#FF3B30;"></span>#FF3B30</td><td><span class="sw-dot" style="background:#FF453A;"></span>#FF453A</td><td class="tn">.red</td></tr>
+        <tr><td>Teal</td><td><span class="sw-dot" style="background:#5AC8FA;"></span>#5AC8FA</td><td><span class="sw-dot" style="background:#64D2FF;"></span>#64D2FF</td><td class="tn">.teal</td></tr>
+        <tr><td>Yellow</td><td><span class="sw-dot" style="background:#FFCC00;"></span>#FFCC00</td><td><span class="sw-dot" style="background:#FFD60A;"></span>#FFD60A</td><td class="tn">.yellow</td></tr>
+      </tbody>
+    </table>
+    <table class="tt">
+      <thead><tr><th>Gray Scale</th><th>Light</th><th>Dark</th><th>SwiftUI Token</th></tr></thead>
+      <tbody>
+        <tr><td>Gray</td><td><span class="sw-dot" style="background:#8E8E93;"></span>#8E8E93</td><td><span class="sw-dot" style="background:#8E8E93;"></span>#8E8E93</td><td class="tn">.gray</td></tr>
+        <tr><td>Gray 2</td><td><span class="sw-dot" style="background:#AEAEB2;"></span>#AEAEB2</td><td><span class="sw-dot" style="background:#636366;"></span>#636366</td><td class="tn">Color(uiColor: .systemGray2)</td></tr>
+        <tr><td>Gray 3</td><td><span class="sw-dot" style="background:#C7C7CC;"></span>#C7C7CC</td><td><span class="sw-dot" style="background:#48484A;"></span>#48484A</td><td class="tn">Color(uiColor: .systemGray3)</td></tr>
+        <tr><td>Gray 4</td><td><span class="sw-dot" style="background:#D1D1D6;"></span>#D1D1D6</td><td><span class="sw-dot" style="background:#3A3A3C;"></span>#3A3A3C</td><td class="tn">Color(uiColor: .systemGray4)</td></tr>
+        <tr><td>Gray 5</td><td><span class="sw-dot" style="background:#E5E5EA;"></span>#E5E5EA</td><td><span class="sw-dot" style="background:#2C2C2E;"></span>#2C2C2E</td><td class="tn">Color(uiColor: .systemGray5)</td></tr>
+        <tr><td>Gray 6</td><td><span class="sw-dot" style="background:#F2F2F7;"></span>#F2F2F7</td><td><span class="sw-dot" style="background:#1C1C1E;"></span>#1C1C1E</td><td class="tn">Color(uiColor: .systemGray6)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sub">
+    <div class="sub-t">SF Pro Dynamic Type Scale — macOS</div>
+    <table class="tt">
+      <thead><tr><th>Text Style</th><th>Size</th><th>Weight</th><th>Leading</th><th>Tracking</th><th>SwiftUI</th></tr></thead>
+      <tbody>
+        <tr><td>Large Title</td><td>34pt</td><td>Bold</td><td>41pt</td><td>-1.05px</td><td class="tn">.largeTitle</td></tr>
+        <tr><td>Title 1</td><td>28pt</td><td>Bold</td><td>34pt</td><td>-0.80px</td><td class="tn">.title</td></tr>
+        <tr><td>Title 2</td><td>22pt</td><td>Bold</td><td>28pt</td><td>-0.70px</td><td class="tn">.title2</td></tr>
+        <tr><td>Title 3</td><td>20pt</td><td>Semibold</td><td>25pt</td><td>-0.60px</td><td class="tn">.title3</td></tr>
+        <tr><td>Headline</td><td>17pt</td><td>Semibold</td><td>22pt</td><td>-0.43px</td><td class="tn">.headline</td></tr>
+        <tr><td>Body</td><td>17pt</td><td>Regular</td><td>22pt</td><td>-0.43px</td><td class="tn">.body</td></tr>
+        <tr><td>Callout</td><td>16pt</td><td>Regular</td><td>20pt</td><td>-0.32px</td><td class="tn">.callout</td></tr>
+        <tr><td>Subheadline</td><td>15pt</td><td>Regular</td><td>19pt</td><td>0px</td><td class="tn">.subheadline</td></tr>
+        <tr><td>Footnote</td><td>13pt</td><td>Regular</td><td>16pt</td><td>+0.03px</td><td class="tn">.footnote</td></tr>
+        <tr><td>Caption 1</td><td>12pt</td><td>Regular</td><td>15pt</td><td>+0.12px</td><td class="tn">.caption</td></tr>
+        <tr><td>Caption 2</td><td>11pt</td><td>Regular</td><td>14pt</td><td>+0.15px</td><td class="tn">.caption2</td></tr>
+      </tbody>
+    </table>
+    <div class="note">SF Pro exclusively via <code>.system()</code>. No custom typefaces. SF Pro Text renders at &le;19pt; SF Pro Display at &ge;20pt. Optical sizing is automatic. Dynamic Type supported for accessibility.</div>
+  </div>
+
+  <div class="sub">
+    <div class="sub-t">Spacing &amp; Layout — Apple 8pt Grid</div>
+    <table class="tt">
+      <thead><tr><th>Token</th><th>Value</th><th>Usage in NitNab</th><th>SwiftUI</th></tr></thead>
+      <tbody>
+        <tr><td class="tn">space.2xs</td><td>4pt</td><td>Icon-to-label inline gap</td><td class="tn">.padding(4)</td></tr>
+        <tr><td class="tn">space.xs</td><td>8pt</td><td>Chip internal, tight groupings</td><td class="tn">.padding(8)</td></tr>
+        <tr><td class="tn">space.sm</td><td>12pt</td><td>Related element pairs</td><td class="tn">.padding(12)</td></tr>
+        <tr><td class="tn">space.md</td><td>16pt</td><td>Standard content padding</td><td class="tn">.padding()</td></tr>
+        <tr><td class="tn">space.lg</td><td>20pt</td><td>Card internal, form fields</td><td class="tn">.padding(20)</td></tr>
+        <tr><td class="tn">space.xl</td><td>24pt</td><td>Section separation</td><td class="tn">.padding(24)</td></tr>
+        <tr><td class="tn">space.2xl</td><td>32pt</td><td>Group separation</td><td class="tn">.padding(32)</td></tr>
+        <tr><td class="tn">space.3xl</td><td>40pt</td><td>Major layout divisions</td><td class="tn">.padding(40)</td></tr>
+        <tr><td class="tn">space.4xl</td><td>64pt</td><td>Hero/header regions</td><td class="tn">.padding(64)</td></tr>
+      </tbody>
+    </table>
+    <table class="tt">
+      <thead><tr><th>Corner Radius</th><th>Value</th><th>Usage</th><th>SwiftUI</th></tr></thead>
+      <tbody>
+        <tr><td class="tn">radius.sm</td><td>8pt</td><td>Buttons, chips, small controls</td><td class="tn">.clipShape(.rect(cornerRadius: 8, style: .continuous))</td></tr>
+        <tr><td class="tn">radius.md</td><td>12pt</td><td>Cards, list rows</td><td class="tn">.clipShape(.rect(cornerRadius: 12, style: .continuous))</td></tr>
+        <tr><td class="tn">radius.lg</td><td>16pt</td><td>Panels, grouped containers</td><td class="tn">.clipShape(.rect(cornerRadius: 16, style: .continuous))</td></tr>
+        <tr><td class="tn">radius.xl</td><td>22pt</td><td>Modals, sheets</td><td class="tn">.clipShape(.rect(cornerRadius: 22, style: .continuous))</td></tr>
+        <tr><td class="tn">radius.pill</td><td>980pt</td><td>Pills, full-round buttons</td><td class="tn">.clipShape(Capsule())</td></tr>
+      </tbody>
+    </table>
+    <div class="note">All corners use <code>.continuous</code> (superellipse). Never standard circular arcs. macOS sidebar width: 240pt default. Content area minimum: 480pt. Toolbar height: 52pt.</div>
+  </div>
+</section>
+
+
+<!-- ██████████████████████████████████████████████████████
+     LIQUID GLASS — THE SELECTED DIRECTION
+     ██████████████████████████████████████████████████████ -->
+<div class="dv"></div>
+<section class="kit" id="k5">
+  <div class="kit-hd">
+    <div class="kit-num">Direction 05 — Material: Liquid Glass</div>
+    <h2>Liquid Glass</h2>
+    <p class="tl">macOS Tahoe's defining design material applied to NitNab. Translucent surfaces, backdrop blur, refracting tints. The tint color shifts contextually: <code style="font-family:var(--mono); font-size:14px;">.blue</code> for transcripts, <code style="font-family:var(--mono); font-size:14px;">.indigo</code> for AI, <code style="font-family:var(--mono); font-size:14px;">.purple</code> for chat, <code style="font-family:var(--mono); font-size:14px;">.green</code> for privacy, <code style="font-family:var(--mono); font-size:14px;">.orange</code> for audio.</p>
+  </div>
+
+  <div class="concept">
+    <h3>Design Rationale</h3>
+    <p>Liquid Glass is Tahoe's signature. NitNab targets macOS 26+ exclusively — it can embrace this material fully. The translucency communicates transparency: you can see through the glass, just as you can see through NitNab's privacy commitments. Nothing is hidden. The contextual tint system maps each of NitNab's three tabs to a system color: Transcript (blue, for content), Summary (indigo, for AI), Chat (purple, for conversation). This creates a gentle ambient color shift as users navigate the app. Liquid Glass materials are implemented via SwiftUI's <code style="font-family:var(--mono); font-size:13px;">.glassEffect()</code> modifier, ensuring the app renders identically to first-party Tahoe apps.</p>
+  </div>
+
+  <div class="sub">
+    <div class="sub-t">Contextual Tint System</div>
+    <table class="tt">
+      <thead><tr><th>Context</th><th>Light Tint</th><th>Dark Tint</th><th>SwiftUI</th><th>Used In</th></tr></thead>
+      <tbody>
+        <tr><td>Transcript</td><td><span class="sw-dot" style="background:#007AFF;"></span>.blue</td><td><span class="sw-dot" style="background:#0A84FF;"></span>.blue</td><td class="tn">.tint(.blue)</td><td>Transcript tab, text view, word count</td></tr>
+        <tr><td>Summary</td><td><span class="sw-dot" style="background:#5856D6;"></span>.indigo</td><td><span class="sw-dot" style="background:#5E5CE6;"></span>.indigo</td><td class="tn">.tint(.indigo)</td><td>AI summary, key points, action items</td></tr>
+        <tr><td>Chat</td><td><span class="sw-dot" style="background:#AF52DE;"></span>.purple</td><td><span class="sw-dot" style="background:#BF5AF2;"></span>.purple</td><td class="tn">.tint(.purple)</td><td>Chat interface, AI responses, prompts</td></tr>
+        <tr><td>Privacy</td><td><span class="sw-dot" style="background:#34C759;"></span>.green</td><td><span class="sw-dot" style="background:#30D158;"></span>.green</td><td class="tn">.tint(.green)</td><td>On-device badge, privacy checkmarks</td></tr>
+        <tr><td>Audio</td><td><span class="sw-dot" style="background:#FF9500;"></span>.orange</td><td><span class="sw-dot" style="background:#FF9F0A;"></span>.orange</td><td class="tn">.tint(.orange)</td><td>Waveform, playback, recording status</td></tr>
+      </tbody>
+    </table>
+    <div class="note">Glass material tokens: background <code>rgba(255,255,255,0.72)</code> light / <code>rgba(28,28,30,0.65)</code> dark. Border <code>rgba(255,255,255,0.18)</code>. Backdrop blur: <code>40pt</code>. Implemented via <code>.glassEffect(in: .rect(cornerRadius: 16))</code> in SwiftUI.</div>
+  </div>
+
+  <div class="sub">
+    <div class="sub-t">Glass Material Tokens</div>
+    <table class="tt">
+      <thead><tr><th>Property</th><th>Light Value</th><th>Dark Value</th><th>SwiftUI Implementation</th></tr></thead>
+      <tbody>
+        <tr><td>Background</td><td class="tn">rgba(255,255,255,0.72)</td><td class="tn">rgba(28,28,30,0.65)</td><td class="tn">.glassEffect(in: .rect(cornerRadius: 16))</td></tr>
+        <tr><td>Border</td><td class="tn">rgba(255,255,255,0.40)</td><td class="tn">rgba(255,255,255,0.06)</td><td class="tn">Automatic with .glassEffect()</td></tr>
+        <tr><td>Backdrop Blur</td><td class="tn">40pt</td><td class="tn">40pt</td><td class="tn">Built into .glassEffect()</td></tr>
+        <tr><td>Secondary Glass</td><td class="tn">rgba(255,255,255,0.50)</td><td class="tn">rgba(28,28,30,0.45)</td><td class="tn">.glassEffect() with nested views</td></tr>
+        <tr><td>Secondary Blur</td><td class="tn">20pt</td><td class="tn">20pt</td><td class="tn">Automatic layering</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sub">
+    <div class="sub-t">Typography Specimens</div>
+    <div class="ts" style="background: linear-gradient(135deg, #E8F0FE, #F2EEFA, #E8F5FF); border:none;">
+      <div class="lb">Large Title — .largeTitle — on Glass</div>
+      <div style="font-size:34px; font-weight:700; letter-spacing:-1.05px; line-height:1.21;">Transcription, through glass</div>
+      <div class="mt">34pt &middot; Bold &middot; Standard label-primary on glass material. No gradient text — Apple HIG: &ldquo;Avoid placing text on colorful backgrounds.&rdquo;</div>
+    </div>
+    <div class="ts">
+      <div class="lb">Headline — .headline</div>
+      <div style="font-size:17px; font-weight:600; letter-spacing:-0.43px; line-height:1.29;">Every word stays on your Mac. Transcribed by Apple Intelligence. Summarized instantly. Visible through glass.</div>
+      <div class="mt">17pt &middot; Semibold &middot; 22pt leading &middot; -0.43px tracking</div>
+    </div>
+    <div class="ts">
+      <div class="lb">Body — .body</div>
+      <div style="font-size:17px; font-weight:400; letter-spacing:-0.43px; line-height:1.41; max-width:560px; color:#424245;">Liquid Glass isn't decoration — it's philosophy. When you can see through the surface, there's nothing to hide. NitNab processes your audio on-device, visible in your Activity Monitor, never sent beyond the glass. Transparency you can verify.</div>
+      <div class="mt">17pt &middot; Regular &middot; 22pt leading &middot; -0.43px tracking &middot; Max line length ~70 characters</div>
+    </div>
+    <div class="ts">
+      <div class="lb">Caption 1 — .caption</div>
+      <div style="font-size:12px; font-weight:400; letter-spacing:0.12px; color:#86868b;">TRANSCRIBED ON-DEVICE &middot; 47 MIN &middot; ENGLISH (US)</div>
+      <div class="mt">12pt &middot; Regular &middot; 15pt leading &middot; +0.12px tracking</div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <div class="sub-t">Light &amp; Dark Appearance — Glass Material</div>
+    <div class="th-g">
+      <div class="th-p" style="background: linear-gradient(145deg, #E8F0FE, #F0E8FA, #E8F5EE); padding:24px; border:1px solid rgba(0,0,0,0.06); border-radius:14px;">
+        <div class="th-lb lt-lb" style="color:#007AFF;">Light + Glass</div>
+        <div style="background:rgba(255,255,255,0.72); backdrop-filter:blur(40px); -webkit-backdrop-filter:blur(40px); border:1px solid rgba(255,255,255,0.4); border-radius:14px; padding:20px;">
+          <h4 style="font-size:18px; letter-spacing:-0.41px; color:#1d1d1f;">NitNab</h4>
+          <p style="font-size:13px; color:#86868b; margin-bottom:12px;">Drop audio files to transcribe</p>
+          <div style="display:flex; gap:6px;">
+            <span class="tag" style="background:#007AFF1A; color:#007AFF;">Transcript</span>
+            <span class="tag" style="background:#5856D61A; color:#5856D6;">Summary</span>
+            <span class="tag" style="background:#AF52DE1A; color:#AF52DE;">Chat</span>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.5); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.3); border-radius:10px; padding:12px; margin-top:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:13px; font-weight:500; letter-spacing:-0.08px; color:#1d1d1f;">On-device processing</span>
+            <span style="font-size:12px; color:#34C759; font-weight:600;">Active</span>
+          </div>
+        </div>
+      </div>
+      <div class="th-p" style="background: linear-gradient(145deg, #080818, #0a0a24, #080a18); padding:24px; border-radius:14px;">
+        <div class="th-lb dk-lb" style="color:#5E5CE6;">Dark + Glass</div>
+        <div style="background:rgba(28,28,30,0.65); backdrop-filter:blur(40px); -webkit-backdrop-filter:blur(40px); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:20px;">
+          <h4 style="font-size:18px; letter-spacing:-0.41px; color:#f5f5f7;">NitNab</h4>
+          <p style="font-size:13px; color:#98989d; margin-bottom:12px;">Drop audio files to transcribe</p>
+          <div style="display:flex; gap:6px;">
+            <span class="tag" style="background:#0A84FF26; color:#0A84FF;">Transcript</span>
+            <span class="tag" style="background:#5E5CE626; color:#5E5CE6;">Summary</span>
+            <span class="tag" style="background:#BF5AF226; color:#BF5AF2;">Chat</span>
+          </div>
+        </div>
+        <div style="background:rgba(28,28,30,0.45); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:12px; margin-top:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:13px; font-weight:500; letter-spacing:-0.08px; color:#f5f5f7;">On-device processing</span>
+            <span style="font-size:12px; color:#30D158; font-weight:600;">Active</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <div class="sub-t">Usage Examples</div>
+    <div class="ug">
+      <div class="uc">
+        <div class="pv" style="background:linear-gradient(135deg, #000428, #001848, #0a0a2e); color:white; text-align:center; position:relative; overflow:hidden;">
+          <div style="position:absolute; top:30%; left:25%; width:160px; height:160px; border-radius:50%; background:rgba(0,122,255,0.1); filter:blur(50px);"></div>
+          <div style="position:absolute; bottom:25%; right:20%; width:120px; height:120px; border-radius:50%; background:rgba(88,86,214,0.08); filter:blur(40px);"></div>
+          <div style="position:relative; z-index:1;">
+            <div style="font-size:32px; margin-bottom:10px;">🎙️</div>
+            <div style="font-size:22px; font-weight:700; letter-spacing:-0.7px;">NitNab</div>
+            <div style="font-size:13px; color:rgba(255,255,255,0.55); margin-top:5px;">Private transcription for macOS Tahoe.</div>
+          </div>
+        </div>
+        <div class="cp"><strong>Launch Graphic — Ambient Glass</strong>Subtle system-color blurs on deep dark. No hard gradients — just ambient light. Feels native to Tahoe's desktop.</div>
+      </div>
+      <div class="uc">
+        <div class="pv" style="background:linear-gradient(145deg, #E8F0FE, #F2EEFA); padding:24px;">
+          <div style="font-size:11px; color:#86868b; font-weight:600; letter-spacing:0.5px; margin-bottom:10px;">THREE TABS &middot; ONE INTERFACE</div>
+          <div style="display:flex; gap:8px;">
+            <div style="flex:1; background:rgba(255,255,255,0.75); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.4); border-radius:12px; padding:14px; text-align:center;">
+              <div style="font-size:18px; margin-bottom:4px;">📝</div>
+              <div style="font-size:12px; font-weight:600; color:#007AFF; letter-spacing:-0.08px;">Transcript</div>
+            </div>
+            <div style="flex:1; background:rgba(255,255,255,0.75); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.4); border-radius:12px; padding:14px; text-align:center;">
+              <div style="font-size:18px; margin-bottom:4px;">✨</div>
+              <div style="font-size:12px; font-weight:600; color:#5856D6; letter-spacing:-0.08px;">Summary</div>
+            </div>
+            <div style="flex:1; background:rgba(255,255,255,0.75); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.4); border-radius:12px; padding:14px; text-align:center;">
+              <div style="font-size:18px; margin-bottom:4px;">💬</div>
+              <div style="font-size:12px; font-weight:600; color:#AF52DE; letter-spacing:-0.08px;">Chat</div>
+            </div>
+          </div>
+        </div>
+        <div class="cp"><strong>Feature Triptych — Glass Cards</strong>Each tab gets its contextual tint on glass. 8pt gap. 12pt radius. Backdrop blur 20pt. Caption 2 label above.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top: 24px;">
+    <strong>Implementation note:</strong> The Liquid Glass direction requires <code>.glassEffect()</code> modifiers on container views and contextual <code>.tint()</code> per tab. No custom fonts, no custom colors, no asset catalogs — pure Apple platform APIs. A single SwiftUI codebase where only the <code>.tint()</code> modifier changes per active tab.
+  </div>
+</section>
+
+<div style="text-align:center; padding:56px 0 36px; color:var(--text-secondary); font-size:12px; line-height:1.6;">
+  <p><strong>NitNab</strong> — Nifty Instant Transcription, Nifty AutoSummarize Buddy</p>
+  <p>macOS Tahoe 26 &middot; Apple Intelligence &middot; FoundationModels &middot; SFSpeechRecognizer</p>
+  <p>Swift 6 &middot; SwiftUI &middot; 100% On-Device &middot; App Sandbox</p>
+  <p style="margin-top:10px; font-size:11px; color:#bbb;">Prepared by Deloitte Digital under Apple Design direction &middot; Liquid Glass &middot; February 2026</p>
+</div>
+
+</body>
+</html>
