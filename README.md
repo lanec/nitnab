@@ -4,7 +4,7 @@
 [![Platform](https://img.shields.io/badge/Platform-macOS%2026.0+-blue.svg)](https://developer.apple.com/macos/)
 [![Architecture](https://img.shields.io/badge/Architecture-Apple%20Silicon-blue.svg)](https://developer.apple.com/silicon/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0.2-brightgreen.svg)](https://github.com/lanec/nitnab/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.4-brightgreen.svg)](https://github.com/lanec/nitnab/releases)
 
 **Nifty Instant Transcription Nifty AutoSummarize Buddy**
 
@@ -382,7 +382,16 @@ open NitNab/NitNab.xcodeproj
 
 #### Option 2: Download Release
 
-Download the latest release from the [Releases](https://github.com/lanec/nitnab/releases) page.
+Download the latest notarized release from the [Releases](https://github.com/lanec/nitnab/releases) page.
+
+Each binary release includes:
+- `NitNab-<version>-macOS-universal-notarized.zip`
+- `NitNab-<version>-macOS-universal-notarized.zip.sha256`
+
+After download:
+```bash
+shasum -a 256 -c NitNab-<version>-macOS-universal-notarized.zip.sha256
+```
 
 ### First Launch
 
@@ -601,6 +610,30 @@ The project follows clean MVVM architecture with actor-based services:
 Run tests with:
 ```bash
 xcodebuild test -project NitNab/NitNab.xcodeproj -scheme NitNab
+```
+
+### Release Process (Notarized Binary)
+
+NitNab keeps release identities out of tracked files (`com.example.*` stays in repo) and injects real signing values only at release time.
+
+Required environment variables:
+- `RELEASE_BUNDLE_ID`
+- `APPLE_TEAM_ID`
+- `DEVELOPER_ID_APPLICATION`
+- `APPLE_DEVELOPER_ID_P12_BASE64`
+- `APPLE_DEVELOPER_ID_P12_PASSWORD`
+- `APPLE_KEY_ID`
+- `APPLE_ISSUER_ID`
+- `APPLE_API_PRIVATE_KEY_P8_BASE64`
+
+Manual fallback release command:
+```bash
+./scripts/release/notarize_and_release.sh 1.0.4
+```
+
+Validation command for downloaded artifacts:
+```bash
+./scripts/release/validate_notarized_artifact.sh ./NitNab-1.0.4-macOS-universal-notarized.zip
 ```
 
 ## 🐛 Troubleshooting

@@ -4,6 +4,20 @@
 **App Status**: ✅ Running with full diagnostics  
 **Your Action Required**: 🧪 Test and share console logs
 
+## Notarized Release Validation
+
+Use these commands to validate a downloaded notarized binary artifact:
+
+```bash
+./scripts/release/validate_notarized_artifact.sh ./NitNab-1.0.4-macOS-universal-notarized.zip
+```
+
+To verify checksum before running validation:
+
+```bash
+shasum -a 256 -c NitNab-1.0.4-macOS-universal-notarized.zip.sha256
+```
+
 ---
 
 ## 🎯 What's Been Done

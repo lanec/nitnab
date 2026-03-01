@@ -1,0 +1,7 @@
+// Release-time signing overrides. This file is templated by scripts/release/notarize_and_release.sh.
+PRODUCT_BUNDLE_IDENTIFIER = __RELEASE_BUNDLE_ID__
+DEVELOPMENT_TEAM = __APPLE_TEAM_ID__
+CODE_SIGN_STYLE = Manual
+CODE_SIGN_IDENTITY = __DEVELOPER_ID_APPLICATION__
+CODE_SIGN_ENTITLEMENTS = NitNab.entitlements
+

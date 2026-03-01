@@ -1,0 +1,235 @@
+name: Release Notarized macOS Build
+
+on:
+  push:
+    tags:
+      - '1.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  notarize-release:
+    runs-on: macos-15
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RELEASE_BUNDLE_ID: ${{ secrets.RELEASE_BUNDLE_ID }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      DEVELOPER_ID_APPLICATION: ${{ secrets.DEVELOPER_ID_APPLICATION }}
+      APPLE_DEVELOPER_ID_P12_BASE64: ${{ secrets.APPLE_DEVELOPER_ID_P12_BASE64 }}
+      APPLE_DEVELOPER_ID_P12_PASSWORD: ${{ secrets.APPLE_DEVELOPER_ID_P12_PASSWORD }}
+      APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+      APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+      APPLE_API_PRIVATE_KEY_P8_BASE64: ${{ secrets.APPLE_API_PRIVATE_KEY_P8_BASE64 }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate required secrets
+        run: |
+          set -euo pipefail
+          missing=0
+          for var in \
+            RELEASE_BUNDLE_ID \
+            APPLE_TEAM_ID \
+            DEVELOPER_ID_APPLICATION \
+            APPLE_DEVELOPER_ID_P12_BASE64 \
+            APPLE_DEVELOPER_ID_P12_PASSWORD \
+            APPLE_KEY_ID \
+            APPLE_ISSUER_ID \
+            APPLE_API_PRIVATE_KEY_P8_BASE64
+          do
+            if [ -z "${!var:-}" ]; then
+              echo "::error::Missing required secret: $var"
+              missing=1
+            fi
+          done
+
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+
+      - name: Select Xcode
+        run: |
+          set -euo pipefail
+          preferred="$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1 || true)"
+          if [ -n "$preferred" ]; then
+            echo "DEVELOPER_DIR=$preferred/Contents/Developer" >> "$GITHUB_ENV"
+          fi
+          xcodebuild -version
+
+      - name: Prepare temporary workspace
+        run: |
+          set -euo pipefail
+          work_dir="${RUNNER_TEMP}/nitnab-release"
+          mkdir -p "$work_dir"
+          echo "WORK_DIR=$work_dir" >> "$GITHUB_ENV"
+          echo "KEYCHAIN_PATH=$work_dir/release-signing.keychain-db" >> "$GITHUB_ENV"
+          echo "P12_PATH=$work_dir/developer_id.p12" >> "$GITHUB_ENV"
+          echo "P8_PATH=$work_dir/AuthKey_${APPLE_KEY_ID}.p8" >> "$GITHUB_ENV"
+          echo "RELEASE_XCCONFIG=$work_dir/release-overrides.xcconfig" >> "$GITHUB_ENV"
+          echo "EXPORT_OPTIONS_PLIST=$work_dir/ExportOptions-DeveloperID.plist" >> "$GITHUB_ENV"
+          echo "ARCHIVE_PATH=$work_dir/NitNab-${GITHUB_REF_NAME}.xcarchive" >> "$GITHUB_ENV"
+          echo "EXPORT_DIR=$work_dir/export" >> "$GITHUB_ENV"
+          echo "PRE_NOTARY_ZIP=$work_dir/NitNab-${GITHUB_REF_NAME}-macOS-universal-pre-notary.zip" >> "$GITHUB_ENV"
+          echo "FINAL_ZIP=$work_dir/NitNab-${GITHUB_REF_NAME}-macOS-universal-notarized.zip" >> "$GITHUB_ENV"
+          echo "CHECKSUM_PATH=$work_dir/NitNab-${GITHUB_REF_NAME}-macOS-universal-notarized.zip.sha256" >> "$GITHUB_ENV"
+          keychain_password="$(python3 -c 'import secrets; print(secrets.token_hex(24))')"
+          echo "KEYCHAIN_PASSWORD=$keychain_password" >> "$GITHUB_ENV"
+
+      - name: Decode certificate and API key
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64
+          import os
+
+          with open(os.environ["P12_PATH"], "wb") as fh:
+              fh.write(base64.b64decode(os.environ["APPLE_DEVELOPER_ID_P12_BASE64"]))
+
+          with open(os.environ["P8_PATH"], "wb") as fh:
+              fh.write(base64.b64decode(os.environ["APPLE_API_PRIVATE_KEY_P8_BASE64"]))
+          PY
+
+      - name: Import Developer ID certificate
+        run: |
+          set -euo pipefail
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$P12_PATH" -k "$KEYCHAIN_PATH" -P "$APPLE_DEVELOPER_ID_P12_PASSWORD" -A -t cert -f pkcs12
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          existing_keychains=()
+          while IFS= read -r keychain_line; do
+            [ -n "$keychain_line" ] || continue
+            existing_keychains+=("$keychain_line")
+          done < <(security list-keychains -d user | sed 's/^[[:space:]]*//; s/^"//; s/"$//')
+          security list-keychains -d user -s "$KEYCHAIN_PATH" "${existing_keychains[@]}"
+          security default-keychain -d user -s "$KEYCHAIN_PATH"
+
+          if ! security find-identity -v -p codesigning "$KEYCHAIN_PATH" | grep -Fq "$DEVELOPER_ID_APPLICATION"; then
+            echo "::error::Expected signing identity not found in imported keychain: $DEVELOPER_ID_APPLICATION"
+            exit 1
+          fi
+
+      - name: Generate release signing overrides
+        run: |
+          set -euo pipefail
+          esc_bundle="$(printf '%s' "$RELEASE_BUNDLE_ID" | sed 's/[\/&]/\\&/g')"
+          esc_team="$(printf '%s' "$APPLE_TEAM_ID" | sed 's/[\/&]/\\&/g')"
+          esc_cert="$(printf '%s' "$DEVELOPER_ID_APPLICATION" | sed 's/[\/&]/\\&/g')"
+
+          sed \
+            -e "s/__RELEASE_BUNDLE_ID__/$esc_bundle/g" \
+            -e "s/__APPLE_TEAM_ID__/$esc_team/g" \
+            -e "s/__DEVELOPER_ID_APPLICATION__/$esc_cert/g" \
+            scripts/release/release-overrides.xcconfig.template > "$RELEASE_XCCONFIG"
+
+          sed \
+            -e "s/__APPLE_TEAM_ID__/$esc_team/g" \
+            scripts/release/ExportOptions-DeveloperID.plist > "$EXPORT_OPTIONS_PLIST"
+
+      - name: Build archive and export app
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project NitNab/NitNab.xcodeproj \
+            -scheme NitNab \
+            -configuration Release \
+            -destination 'generic/platform=macOS' \
+            -archivePath "$ARCHIVE_PATH" \
+            -xcconfig "$RELEASE_XCCONFIG" \
+            clean archive
+
+          xcodebuild \
+            -exportArchive \
+            -archivePath "$ARCHIVE_PATH" \
+            -exportPath "$EXPORT_DIR" \
+            -exportOptionsPlist "$EXPORT_OPTIONS_PLIST"
+
+      - name: Verify signature and create pre-notary zip
+        run: |
+          set -euo pipefail
+          app_path="$EXPORT_DIR/NitNab.app"
+          test -d "$app_path"
+          codesign --verify --deep --strict --verbose=2 "$app_path"
+          spctl -a -vvv --type exec "$app_path"
+          ditto -c -k --sequesterRsrc --keepParent "$app_path" "$PRE_NOTARY_ZIP"
+
+      - name: Notarize, staple, and validate
+        run: |
+          set -euo pipefail
+          submit_json="$WORK_DIR/notary-submit.json"
+          app_path="$EXPORT_DIR/NitNab.app"
+
+          xcrun notarytool submit "$PRE_NOTARY_ZIP" \
+            --key "$P8_PATH" \
+            --key-id "$APPLE_KEY_ID" \
+            --issuer "$APPLE_ISSUER_ID" \
+            --wait \
+            --output-format json > "$submit_json"
+
+          status="$(python3 - "$submit_json" <<'PY'
+          import json
+          import sys
+          with open(sys.argv[1], "r", encoding="utf-8") as fh:
+              data = json.load(fh)
+          print(data.get("status", ""))
+          PY
+          )"
+
+          if [ "$status" != "Accepted" ]; then
+            id="$(python3 - "$submit_json" <<'PY'
+            import json
+            import sys
+            with open(sys.argv[1], "r", encoding="utf-8") as fh:
+                data = json.load(fh)
+            print(data.get("id", ""))
+            PY
+            )"
+            if [ -n "$id" ]; then
+              xcrun notarytool log "$id" \
+                --key "$P8_PATH" \
+                --key-id "$APPLE_KEY_ID" \
+                --issuer "$APPLE_ISSUER_ID" > "$WORK_DIR/notary-log.json" || true
+            fi
+            echo "::error::Notarization failed with status $status"
+            exit 1
+          fi
+
+          xcrun stapler staple "$app_path"
+          xcrun stapler validate "$app_path"
+          spctl -a -vvv --type exec "$app_path"
+
+      - name: Package notarized artifact
+        run: |
+          set -euo pipefail
+          app_path="$EXPORT_DIR/NitNab.app"
+          ditto -c -k --sequesterRsrc --keepParent "$app_path" "$FINAL_ZIP"
+          shasum -a 256 "$FINAL_ZIP" > "$CHECKSUM_PATH"
+          ls -lh "$FINAL_ZIP" "$CHECKSUM_PATH"
+
+      - name: Publish release assets
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" "$FINAL_ZIP" "$CHECKSUM_PATH" --clobber
+          else
+            gh release create "$tag" "$FINAL_ZIP" "$CHECKSUM_PATH" \
+              --title "Version $tag" \
+              --notes "Notarized public binary release."
+          fi
+
+      - name: Cleanup temporary signing files
+        if: always()
+        run: |
+          set +e
+          if [ -n "${KEYCHAIN_PATH:-}" ] && [ -f "$KEYCHAIN_PATH" ]; then
+            security delete-keychain "$KEYCHAIN_PATH" || true
+          fi
+          rm -rf "${WORK_DIR:-}"

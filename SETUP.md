@@ -125,7 +125,31 @@ The project follows:
 
 ## Distribution
 
-### Creating a Release Build
+### Creating a Release Build (Notarized)
+
+NitNab keeps tracked project signing identifiers sanitized (`com.example.*`).  
+For distributable binaries, inject release identities at build time only.
+
+Required environment variables:
+
+- `RELEASE_BUNDLE_ID` (for example `com.lanec.nitnab`)
+- `APPLE_TEAM_ID` (for example `YSG28M8Y96`)
+- `DEVELOPER_ID_APPLICATION` (full certificate name)
+- `APPLE_DEVELOPER_ID_P12_BASE64`
+- `APPLE_DEVELOPER_ID_P12_PASSWORD`
+- `APPLE_KEY_ID`
+- `APPLE_ISSUER_ID`
+- `APPLE_API_PRIVATE_KEY_P8_BASE64`
+
+Manual release command:
+
+```bash
+./scripts/release/notarize_and_release.sh 1.0.4
+```
+
+### Build-Only (No Notarization)
+
+If you only need a local build artifact:
 
 ```bash
 xcodebuild -scheme NitNab \
@@ -139,12 +163,11 @@ xcodebuild -exportArchive \
   -exportOptionsPlist ExportOptions.plist
 ```
 
-### Notarization (for distribution)
+### Validate Downloaded Notarized Artifact
 
-1. Archive the app (Product → Archive)
-2. Distribute the app (Organizer → Distribute App)
-3. Choose "Developer ID" for distribution outside the App Store
-4. Xcode will automatically notarize the app
+```bash
+./scripts/release/validate_notarized_artifact.sh ./NitNab-1.0.4-macOS-universal-notarized.zip
+```
 
 ## Troubleshooting
 

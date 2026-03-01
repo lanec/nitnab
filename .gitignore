@@ -91,5 +91,12 @@ build_app.sh
 # Build artifacts
 build/
 DerivedData/
-/.github
 /Features
+
+# Release automation local artifacts
+scripts/release/.release-secrets.env
+scripts/release/*.local
+scripts/release/*.p8
+scripts/release/*.p12
+scripts/release/*.keychain
+scripts/release/*.keychain-db
