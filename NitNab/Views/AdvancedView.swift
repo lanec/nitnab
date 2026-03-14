@@ -265,7 +265,7 @@ struct AdvancedView: View {
                         
                         // Transcript View
                         if viewModel.selectedJobIDs.count > 1 {
-                            BulkSelectionDetailView(
+                            MultiSelectionDetailView(
                                 snapshot: viewModel.selectionSnapshot,
                                 canDelete: !viewModel.selectedJobIDs.isEmpty,
                                 onMoveToTrash: { viewModel.requestDeleteForCurrentSelection() },
